@@ -16,6 +16,7 @@ import {
 import { USER_ID } from "./TodoList";
 import { FaPen, FaRegTrashAlt } from "react-icons/fa";
 import { MdCheck, MdClose } from "react-icons/md";
+import ButtonAction from "./ButtonAction";
 
 type TodoProps = {
   todo: TodoType;
@@ -89,7 +90,7 @@ const Todo = ({ todo }: TodoProps) => {
         {isEdit ? (
           <>
             {/* save btn */}
-            <ConfigProvider
+            {/* <ConfigProvider
               theme={{
                 components: {
                   Button: {
@@ -113,10 +114,23 @@ const Todo = ({ todo }: TodoProps) => {
                 }
                 icon={<MdCheck />}
               />
-            </ConfigProvider>
+            </ConfigProvider> */}
+            <ButtonAction
+              key="saveBtn"
+              themeColor="#239b56"
+              className="!text-xl"
+              onClick={() => fnHandleUpdate({ ...todo, title: updateTitle })}
+              loading={isUpdateLoading}
+              disabled={
+                isUpdateLoading ||
+                !updateTitle.trim() ||
+                updateTitle.trim() === todo.title
+              }
+              icon={<MdCheck />}
+            />
 
             {/* cancel btn */}
-            <ConfigProvider
+            {/* <ConfigProvider
               theme={{
                 components: {
                   Button: {
@@ -135,12 +149,20 @@ const Todo = ({ todo }: TodoProps) => {
                 disabled={isUpdateLoading}
                 icon={<MdClose />}
               />
-            </ConfigProvider>
+            </ConfigProvider> */}
+            <ButtonAction
+              key="cancelBtn"
+              themeColor="#e74c3c"
+              className="!text-xl"
+              onClick={fnHandleCancel}
+              disabled={isUpdateLoading}
+              icon={<MdClose />}
+            />
           </>
         ) : (
           <>
             {/* edit btn */}
-            <ConfigProvider
+            {/* <ConfigProvider
               theme={{
                 components: {
                   Button: {
@@ -157,31 +179,43 @@ const Todo = ({ todo }: TodoProps) => {
                 onClick={() => setIsEdit(true)}
                 icon={<FaPen />}
               />
-            </ConfigProvider>
+            </ConfigProvider> */}
+            <ButtonAction
+              key="editBtn"
+              themeColor="#f1c40f"
+              onClick={() => setIsEdit(true)}
+              icon={<FaPen />}
+            />
 
-            {/* delete btn */}
-            <ConfigProvider
-              theme={{
-                components: {
-                  Button: {
-                    defaultActiveColor: "#e74c3c",
-                    defaultActiveBorderColor: "#e74c3c ",
-                    defaultHoverBorderColor: "#e74c3c ",
-                    defaultHoverColor: "#e74c3c ",
-                  },
-                },
-              }}
+            <Popconfirm
+              title="Delete the task"
+              description="Are you sure to delete this task?"
+              onConfirm={() => fnOnDeleteConfirm(todo.id)}
+              okText="Yes"
+              cancelText="No"
             >
-              <Popconfirm
-                title="Delete the task"
-                description="Are you sure to delete this task?"
-                onConfirm={() => fnOnDeleteConfirm(todo.id)}
-                okText="Yes"
-                cancelText="No"
+              {/* delete btn */}
+              {/* <ConfigProvider
+                theme={{
+                  components: {
+                    Button: {
+                      defaultActiveColor: "#e74c3c",
+                      defaultActiveBorderColor: "#e74c3c ",
+                      defaultHoverBorderColor: "#e74c3c ",
+                      defaultHoverColor: "#e74c3c ",
+                    },
+                  },
+                }}
               >
                 <Button key="deleteBtn" icon={<FaRegTrashAlt />} />
-              </Popconfirm>
-            </ConfigProvider>
+              </ConfigProvider> */}
+
+              <ButtonAction
+                key="deleteBtn"
+                themeColor="#e74c3c"
+                icon={<FaRegTrashAlt />}
+              />
+            </Popconfirm>
           </>
         )}
       </div>
