@@ -1,9 +1,5 @@
-export type Todo = {
-    userId: number,
-    id: number,
-    title: string,
-    completed: boolean
-}
+import type { TodoType } from "../../../utils/types/todoType"
 
-export type CreateTodoListRequest = Omit<Todo, "id">
-export type UpdateTodoListRequest = Todo
+
+export type CreateTodoListRequest = Omit<TodoType, "id">
+export type UpdateTodoListRequest = TodoType

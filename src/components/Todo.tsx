@@ -1,14 +1,6 @@
-import {
-  Button,
-  Checkbox,
-  ConfigProvider,
-  Input,
-  Popconfirm,
-  message,
-} from "antd";
+import { Checkbox, ConfigProvider, Input, Popconfirm, message } from "antd";
 
 import { useState } from "react";
-import type { Todo as TodoType } from "../services/TodolistService/request/todoListRequest";
 import {
   useDeleteTodoListMutation,
   useUpdateTodoListMutation,
@@ -17,6 +9,7 @@ import { USER_ID } from "./TodoList";
 import { FaPen, FaRegTrashAlt } from "react-icons/fa";
 import { MdCheck, MdClose } from "react-icons/md";
 import ButtonAction from "./ButtonAction";
+import type { TodoType } from "../utils/types/todoType";
 
 type TodoProps = {
   todo: TodoType;
@@ -90,31 +83,6 @@ const Todo = ({ todo }: TodoProps) => {
         {isEdit ? (
           <>
             {/* save btn */}
-            {/* <ConfigProvider
-              theme={{
-                components: {
-                  Button: {
-                    defaultActiveColor: "#239b56",
-                    defaultActiveBorderColor: "#239b56 ",
-                    defaultHoverBorderColor: "#239b56 ",
-                    defaultHoverColor: "#239b56 ",
-                  },
-                },
-              }}
-            >
-              <Button
-                key="saveBtn"
-                className="!text-xl"
-                onClick={() => fnHandleUpdate({ ...todo, title: updateTitle })}
-                loading={isUpdateLoading}
-                disabled={
-                  isUpdateLoading ||
-                  !updateTitleTrimmed ||
-                  updateTitleTrimmed === todo.title
-                }
-                icon={<MdCheck />}
-              />
-            </ConfigProvider> */}
             <ButtonAction
               key="saveBtn"
               themeColor="#239b56"
@@ -128,28 +96,7 @@ const Todo = ({ todo }: TodoProps) => {
               }
               icon={<MdCheck />}
             />
-
             {/* cancel btn */}
-            {/* <ConfigProvider
-              theme={{
-                components: {
-                  Button: {
-                    defaultActiveColor: "#e74c3c",
-                    defaultActiveBorderColor: "#e74c3c ",
-                    defaultHoverBorderColor: "#e74c3c ",
-                    defaultHoverColor: "#e74c3c ",
-                  },
-                },
-              }}
-            >
-              <Button
-                key="cancelBtn"
-                className="!text-xl"
-                onClick={fnHandleCancel}
-                disabled={isUpdateLoading}
-                icon={<MdClose />}
-              />
-            </ConfigProvider> */}
             <ButtonAction
               key="cancelBtn"
               themeColor="#e74c3c"
@@ -162,31 +109,12 @@ const Todo = ({ todo }: TodoProps) => {
         ) : (
           <>
             {/* edit btn */}
-            {/* <ConfigProvider
-              theme={{
-                components: {
-                  Button: {
-                    defaultActiveColor: "#f1c40f",
-                    defaultActiveBorderColor: "#f1c40f ",
-                    defaultHoverBorderColor: "#f1c40f",
-                    defaultHoverColor: "#f1c40f",
-                  },
-                },
-              }}
-            >
-              <Button
-                key="editBtn"
-                onClick={() => setIsEdit(true)}
-                icon={<FaPen />}
-              />
-            </ConfigProvider> */}
             <ButtonAction
               key="editBtn"
               themeColor="#f1c40f"
               onClick={() => setIsEdit(true)}
               icon={<FaPen />}
             />
-
             <Popconfirm
               title="Delete the task"
               description="Are you sure to delete this task?"
@@ -195,21 +123,6 @@ const Todo = ({ todo }: TodoProps) => {
               cancelText="No"
             >
               {/* delete btn */}
-              {/* <ConfigProvider
-                theme={{
-                  components: {
-                    Button: {
-                      defaultActiveColor: "#e74c3c",
-                      defaultActiveBorderColor: "#e74c3c ",
-                      defaultHoverBorderColor: "#e74c3c ",
-                      defaultHoverColor: "#e74c3c ",
-                    },
-                  },
-                }}
-              >
-                <Button key="deleteBtn" icon={<FaRegTrashAlt />} />
-              </ConfigProvider> */}
-
               <ButtonAction
                 key="deleteBtn"
                 themeColor="#e74c3c"

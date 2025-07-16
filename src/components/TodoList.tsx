@@ -15,6 +15,7 @@ const TodoList = () => {
     isLoading: isTodoListLoading,
     isFetching: isTodoListFetching,
   } = useGetAllTodoListQuery(USER_ID);
+
   const [createTodo, { isLoading: isCreateLoading }] =
     useCreateTodoListMutation();
 

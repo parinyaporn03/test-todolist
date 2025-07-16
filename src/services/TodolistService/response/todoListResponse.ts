@@ -1,6 +1,6 @@
-import type { Todo } from "../request/todoListRequest"
+import type { TodoType } from "../../../utils/types/todoType"
 
-export type GetAllTodoListByUserIdResponse = Todo[]
-export type CreateTodoListResponse = Todo
-export type UpdateTodoListResponse = Todo
-export type DeleteTodoListResponse = unknown
+export type GetAllTodoListByUserIdResponse = TodoType[]
+export type CreateTodoListResponse = TodoType
+export type UpdateTodoListResponse = TodoType
+export type DeleteTodoListResponse = object
