@@ -1,26 +1,19 @@
 import { Button, ConfigProvider, type ButtonProps } from "antd";
 import type { ReactNode } from "react";
 
-type ThemedButtonProps = {
-  themeColor: string;
+interface ButtonActionProps extends Omit<ButtonProps, "color"> {
+  color: string;
   children?: ReactNode;
-};
+}
 
-const ButtonAction = ({
-  themeColor,
-  children,
-  ...props
-}: ButtonProps & ThemedButtonProps) => {
+const ButtonAction = ({ color, children, ...props }: ButtonActionProps) => {
   return (
     <ConfigProvider
       theme={{
-        components: {
-          Button: {
-            defaultActiveColor: themeColor,
-            defaultActiveBorderColor: themeColor,
-            defaultHoverBorderColor: themeColor,
-            defaultHoverColor: themeColor,
-          },
+        token: {
+          colorPrimary: color,
+          colorPrimaryHover: color,
+          colorPrimaryBorder: color,
         },
       }}
     >

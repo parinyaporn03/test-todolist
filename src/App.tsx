@@ -1,5 +1,5 @@
 import { ConfigProvider } from "antd";
-import TodoList from "./components/TodoList";
+import TodoList from "./pages/TodoList";
 import "@ant-design/v5-patch-for-react-19";
 function App() {
   return (

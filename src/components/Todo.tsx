@@ -5,11 +5,11 @@ import {
   useDeleteTodoListMutation,
   useUpdateTodoListMutation,
 } from "../services/TodolistService/TodoListService";
-import { USER_ID } from "./TodoList";
+import { USERID } from "../pages/TodoList";
 import { FaPen, FaRegTrashAlt } from "react-icons/fa";
 import { MdCheck, MdClose } from "react-icons/md";
 import ButtonAction from "./ButtonAction";
-import type { TodoType } from "../utils/types/todoType";
+import type { TodoType } from "../services/TodolistService/types/todoListService.type";
 
 type TodoProps = {
   todo: TodoType;
@@ -22,23 +22,29 @@ const Todo = ({ todo }: TodoProps) => {
 
   const [isEdit, setIsEdit] = useState(false);
   const [updateTitle, setUpdateTitle] = useState(todo.title);
-  const updateTitleTrimmed = updateTitle.trim();
 
-  const fnHandleUpdate = async (todo: TodoType) => {
-    if (!updateTitleTrimmed) return;
-    const { error } = await updateTodo({ ...todo, userId: USER_ID });
-    if (!error) setIsEdit(false);
+  const handleUpdate = async (todo: TodoType) => {
+    try {
+      await updateTodo({ ...todo, userId: USERID });
+      setIsEdit(false);
+    } catch (error) {
+      console.log("Update error:", error);
+    }
   };
 
-  const fnHandleCancel = () => {
+  const handleCancel = () => {
     setIsEdit(false);
     setUpdateTitle(todo.title);
   };
 
   const fnOnDeleteConfirm = async (id: number) => {
-    const { error } = await deleteTodo(id);
-    if (error) return message.error("Delete error");
-    message.success("Delete sucess");
+    try {
+      await deleteTodo(id);
+      message.success("Delete sucess");
+    } catch (error) {
+      console.log("Delete error:", error);
+      message.error("Delete error");
+    }
   };
 
   return (
@@ -66,7 +72,7 @@ const Todo = ({ todo }: TodoProps) => {
           <Checkbox
             checked={todo.completed}
             onChange={(e) =>
-              fnHandleUpdate({ ...todo, completed: e.target.checked })
+              handleUpdate({ ...todo, completed: e.target.checked })
             }
           >
             <div
@@ -84,10 +90,10 @@ const Todo = ({ todo }: TodoProps) => {
           <>
             {/* save btn */}
             <ButtonAction
-              key="saveBtn"
-              themeColor="#239b56"
+              // key="saveBtn"
+              color="#239b56"
               className="!text-xl"
-              onClick={() => fnHandleUpdate({ ...todo, title: updateTitle })}
+              onClick={() => handleUpdate({ ...todo, title: updateTitle })}
               loading={isUpdateLoading}
               disabled={
                 isUpdateLoading ||
@@ -98,10 +104,10 @@ const Todo = ({ todo }: TodoProps) => {
             />
             {/* cancel btn */}
             <ButtonAction
-              key="cancelBtn"
-              themeColor="#e74c3c"
+              // key="cancelBtn"
+              color="#e74c3c"
               className="!text-xl"
-              onClick={fnHandleCancel}
+              onClick={handleCancel}
               disabled={isUpdateLoading}
               icon={<MdClose />}
             />
@@ -110,8 +116,8 @@ const Todo = ({ todo }: TodoProps) => {
           <>
             {/* edit btn */}
             <ButtonAction
-              key="editBtn"
-              themeColor="#f1c40f"
+              // key="editBtn"
+              color="#f1c40f"
               onClick={() => setIsEdit(true)}
               icon={<FaPen />}
             />
@@ -125,7 +131,7 @@ const Todo = ({ todo }: TodoProps) => {
               {/* delete btn */}
               <ButtonAction
                 key="deleteBtn"
-                themeColor="#e74c3c"
+                color="#e74c3c"
                 icon={<FaRegTrashAlt />}
               />
             </Popconfirm>

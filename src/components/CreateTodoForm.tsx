@@ -1,34 +1,35 @@
 import { Button, ConfigProvider, Input } from "antd";
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { useState } from "react";
+import { useCreateTodoListMutation } from "../services/TodolistService/TodoListService";
+import { USERID } from "../pages/TodoList";
 
-type CreateTodoFormProps = {
-  onCreate: (
-    todo: string,
-    setTodoName: Dispatch<SetStateAction<string>>
-  ) => void;
-  isLoading: boolean;
-};
-
-const CreateTodoForm = ({ onCreate, isLoading }: CreateTodoFormProps) => {
+const CreateTodoForm = () => {
   const [todoName, setTodoName] = useState("");
+  const [createTodo, { isLoading }] = useCreateTodoListMutation();
 
-  const fnHandleAdd = () => {
-    onCreate(todoName, setTodoName);
+  const handleCreateTodo = async () => {
+    const todoTrimmed = todoName.trim();
+    if (!todoTrimmed) return;
+    try {
+      await createTodo({
+        userId: USERID,
+        title: todoTrimmed,
+        completed: false,
+      });
+      setTodoName("");
+    } catch (error) {
+      console.log("Create error:", error);
+    }
   };
 
   return (
     <div className="flex gap-2">
       <ConfigProvider
         theme={{
-          components: {
-            Input: {
-              hoverBorderColor: "#239b56",
-              activeBorderColor: "#239b56",
-            },
-            Button: {
-              defaultHoverBorderColor: "#239b56 ",
-              defaultHoverColor: "#239b56 ",
-            },
+          token: {
+            colorPrimary: "#239b56",
+            colorPrimaryHover: "#239b56",
+            colorPrimaryBorder: "#239b56",
           },
         }}
       >
@@ -38,7 +39,11 @@ const CreateTodoForm = ({ onCreate, isLoading }: CreateTodoFormProps) => {
           onChange={(e) => setTodoName(e.target.value)}
           disabled={isLoading}
         />
-        <Button onClick={fnHandleAdd} loading={isLoading} disabled={!todoName}>
+        <Button
+          onClick={handleCreateTodo}
+          loading={isLoading}
+          disabled={!todoName}
+        >
           Add
         </Button>
       </ConfigProvider>

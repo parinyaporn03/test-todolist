@@ -1,10 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import type { CreateTodoListResponse, DeleteTodoListResponse, GetAllTodoListByUserIdResponse, UpdateTodoListResponse } from './response/todoListResponse'
-import type { CreateTodoListRequest, UpdateTodoListRequest } from './request/todoListRequest'
+import type { CreateTodoListRequest, CreateTodoListResponse, DeleteTodoListResponse, GetAllTodoListByUserIdResponse, UpdateTodoListRequest, UpdateTodoListResponse } from './types/todoListService.type';
+
 
 export const todoListApi = createApi({
     reducerPath: 'todoListApi',
-    // manage caching
     tagTypes: ["todoList"],
     baseQuery: fetchBaseQuery({ baseUrl: 'https://jsonplaceholder.typicode.com/' }),
     endpoints: (builder) => ({
@@ -18,9 +17,22 @@ export const todoListApi = createApi({
         }),
         updateTodoList: builder.mutation<UpdateTodoListResponse, UpdateTodoListRequest>({
             query: (req) => ({ url: `/todos/${req.id}`, method: "PUT", body: req }),
-            invalidatesTags: (_result, _error, req) => {
-                return [{ type: "todoList", id: req.id }]
-            },
+
+            onQueryStarted: async (req, { dispatch, queryFulfilled }) => {
+                const patchResult = dispatch(
+                    todoListApi.util.updateQueryData("getAllTodoList", req.userId, (draft) => {
+                        const index = draft.findIndex((todo) => todo.id === req.id);
+                        if (index !== -1) {
+                            draft[index] = { ...draft[index], ...req }
+                        }
+                    })
+                );
+                try {
+                    await queryFulfilled;
+                } catch {
+                    patchResult.undo()
+                }
+            }
         }),
         deleteTodoList: builder.mutation<DeleteTodoListResponse, number>({
             query: (id) => ({ url: `/todos/${id}`, method: "DELETE" }),
